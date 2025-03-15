@@ -1,1 +1,72 @@
-.
+import pygame
+import random
+import time
+
+pygame.init()
+
+WIDTH, HEIGHT = 800, 600
+BAR_WIDTH = 8
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Merge Sort Visualization")
+
+def draw_array(arr, colors):
+    screen.fill(BLACK)
+    for i in range(len(arr)):
+        pygame.draw.rect(screen, colors[i], (i * BAR_WIDTH, HEIGHT - arr[i], BAR_WIDTH, arr[i]))
+    pygame.display.update()
+
+def merge_sort(arr, left, right):
+    if left < right:
+        mid = (left + right) // 2
+        merge_sort(arr, left, mid)
+        merge_sort(arr, mid + 1, right)
+        merge(arr, left, mid, right)
+
+def merge(arr, left, mid, right):
+    left_part = arr[left:mid + 1]
+    right_part = arr[mid + 1:right + 1]
+    
+    i = j = 0
+    k = left
+    
+    while i < len(left_part) and j < len(right_part):
+        draw_array(arr, [(GREEN if x == k else WHITE) for x in range(len(arr))])
+        time.sleep(0.05)
+        
+        if left_part[i] < right_part[j]:
+            arr[k] = left_part[i]
+            i += 1
+        else:
+            arr[k] = right_part[j]
+            j += 1
+        k += 1
+    
+    while i < len(left_part):
+        arr[k] = left_part[i]
+        i += 1
+        k += 1
+        draw_array(arr, [(RED if x == k else WHITE) for x in range(len(arr))])
+        time.sleep(0.05)
+    
+    while j < len(right_part):
+        arr[k] = right_part[j]
+        j += 1
+        k += 1
+        draw_array(arr, [(RED if x == k else WHITE) for x in range(len(arr))])
+        time.sleep(0.05)
+
+def main():
+    arr = [random.randint(10, HEIGHT - 50) for _ in range(WIDTH // BAR_WIDTH)]
+    draw_array(arr, [WHITE] * len(arr))
+    merge_sort(arr, 0, len(arr) - 1)
+    draw_array(arr, [GREEN] * len(arr))
+    time.sleep(2)
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
