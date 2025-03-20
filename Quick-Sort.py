@@ -52,6 +52,7 @@ def main():
     draw_array(arr, [GREEN] * len(arr))
     time.sleep(2)
     pygame.quit()
+    
 
 if __name__ == "__main__":
     main()
